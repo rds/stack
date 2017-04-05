@@ -3,11 +3,11 @@
 import React from 'react'
 
 import HelloButton from '../../container/hello-button'
-import Message from '../../container/message'
+import MessageList from '../../container/message-list'
 
 const Hello = () =>
   <div>
-    <Message />
+    <MessageList />
     <HelloButton />
   </div>
 

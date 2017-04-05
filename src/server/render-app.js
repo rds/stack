@@ -8,11 +8,11 @@ const renderApp = (title: string) =>
 <html>
   <head>
     <title>${title}</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/assets/stylesheets/style.css">
   </head>
   <body>
     <div class="${APP_CONTAINER_CLASS}"></div>
-    <script src="${isProd ? STATIC_PATH : `http://localhost:${WDS_PORT}/dist`}/js/bundle.js"></script>
+    <script src="${isProd ? '/js' : `http://localhost:${WDS_PORT}/dist`}/bundle.js"></script>
   </body>
 </html>
 `

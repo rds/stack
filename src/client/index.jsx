@@ -7,27 +7,37 @@ import ReactDOM from 'react-dom'
 import { AppContainer } from 'react-hot-loader'
 import { Provider } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { createStore, combineReducers } from 'redux'
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
+import { ApolloClient, ApolloProvider } from 'react-apollo';
 
 import App from './app'
 import helloReducer from './reducer/hello'
 import { APP_CONTAINER_SELECTOR } from '../shared/config'
 import { isProd } from '../shared/util'
 
-const store = createStore(combineReducers({ hello: helloReducer }),
-  // eslint-disable-next-line no-underscore-dangle
-  isProd ? undefined : window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+const client = new ApolloClient()
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+const store = createStore(
+  combineReducers({
+    hello: helloReducer,
+    apollo: client.reducer()
+  }),
+  {},
+  composeEnhancers(
+    applyMiddleware(client.middleware())
+  )
+)
 
 const rootEl = document.querySelector(APP_CONTAINER_SELECTOR)
 
 const wrapApp = (AppComponent, reduxStore) =>
-  <Provider store={reduxStore}>
+  <ApolloProvider store={store} client={client}>
     <BrowserRouter>
       <AppContainer>
         <AppComponent />
       </AppContainer>
     </BrowserRouter>
-  </Provider>
+  </ApolloProvider>
 
 ReactDOM.render(wrapApp(App, store), rootEl)
 
